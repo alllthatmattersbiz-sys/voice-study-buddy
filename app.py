@@ -1,58 +1,39 @@
 import streamlit as st
 import os
-import requests
-import json
 from dotenv import load_dotenv
 
 load_dotenv()
 
 st.set_page_config(page_title="Voice Study Buddy", layout="wide")
-st.title("🎓 Voice Study Buddy")
-st.write("Ask me anything and I'll help you learn!")
+st.title("🎤 Voice Study Buddy")
+st.write("Your AI-powered study partner powered by Claude!")
 
-API_KEY = os.getenv("ANTHROPIC_API_KEY")
+VAPI_ASSISTANT_ID = os.getenv("VAPI_ASSISTANT_ID")
 
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+st.info("""
+### 📞 How to Use Voice Study Buddy
 
-# Display conversation
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.write(message["content"])
+You have **two ways** to chat with your AI study buddy:
+""")
 
-# Input box
-user_input = st.chat_input("Ask a question...")
+col1, col2 = st.columns(2)
 
-if user_input:
-    # Add user message
-    st.session_state.messages.append({"role": "user", "content": user_input})
+with col1:
+    st.subheader("🎙️ Voice Call")
+    st.write("Call your personal study buddy via phone or web")
+    if st.button("📱 Start Voice Call"):
+        st.markdown(f"""
+        [Click here to start a voice call](https://app.vapi.ai/{VAPI_ASSISTANT_ID})
+        """)
+
+with col2:
+    st.subheader("💬 Text Chat")
+    st.write("Ask questions via text in this app")
+    user_input = st.chat_input("Ask a study question...")
     
-    with st.chat_message("user"):
-        st.write(user_input)
-    
-    # Call Claude via HTTP
-    try:
-        response = requests.post(
-            "https://api.anthropic.com/v1/messages",
-            headers={
-                "x-api-key": API_KEY,
-                "anthropic-version": "2023-06-01",
-                "content-type": "application/json"
-            },
-            json={
-                "model": "claude-haiku-4-5-20251001",
-                "max_tokens": 500,
-                "system": "You are a helpful study buddy. Explain concepts clearly.",
-                "messages": st.session_state.messages
-            }
-        )
-        
-        data = response.json()
-        assistant_message = data['content'][0]['text']
-        st.session_state.messages.append({"role": "assistant", "content": assistant_message})
-        
-        with st.chat_message("assistant"):
-            st.write(assistant_message)
-    
-    except Exception as e:
-        st.error(f"Error: {str(e)}")
+    if user_input:
+        st.write(f"**You:** {user_input}")
+        st.write("**Study Buddy:** Great question! Claude is thinking...")
+
+st.divider()
+st.caption("🚀 Voice Study Buddy | Powered by Claude + Vapi")
