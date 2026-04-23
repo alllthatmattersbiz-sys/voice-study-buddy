@@ -1,0 +1,33 @@
+User speaks
+    ↓
+Browser transcribes (Web Speech API)
+    ↓
+Sends to Claude
+    ↓
+Claude responds
+    ↓
+Text-to-speech reads back
+    ↓
+Ready for next question!
+
+
+---------------
+
+voice-study-buddy/
+├── app.py                 (Main Streamlit app)
+├── utils/
+│   ├── claude_handler.py (Claude API calls)
+│   └── prompts.py        (Study buddy system prompt)
+├── requirements.txt
+├── README.md
+└── .env
+
+-----------
+
+🏗️ Architecture
+
+Frontend: Streamlit + HTML5 Audio APIs
+AI: Claude API
+Speech-to-Text: Web Speech API (FREE, browser)
+Text-to-Speech: Web Speech API (FREE, browser)
+Deployment: Streamlit Cloud (FREE)
